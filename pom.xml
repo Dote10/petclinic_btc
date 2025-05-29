@@ -524,9 +524,9 @@
                 <db.script>mysql</db.script>
                 <jpa.database>MYSQL</jpa.database>
                 <jdbc.driverClassName>com.mysql.cj.jdbc.Driver</jdbc.driverClassName>
-                <jdbc.url>jdbc:mysql://${env.DB_URL}?useUnicode=true</jdbc.url>
-                <jdbc.username>${env.DB_USERNAME}</jdbc.username>
-                <jdbc.password>${env.DB_PASSWORD}</jdbc.password>
+                <jdbc.url>jdbc:mysql://${DB_URL}?useUnicode=true</jdbc.url>
+                <jdbc.username>${DB_USERNAME}</jdbc.username>
+                <jdbc.password>${DB_PASSWORD}</jdbc.password>
             </properties>
             <dependencies>
                 <dependency>
