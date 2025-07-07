@@ -18,7 +18,7 @@ spec:
         name: petclinic
     spec:
       containers:
-        - name: petclinic-was
+        - name: petwas
           image: 534334097321.dkr.ecr.ap-northeast-2.amazonaws.com/pet/waserver:v2
           imagePullPolicy: Always  
           ports:
