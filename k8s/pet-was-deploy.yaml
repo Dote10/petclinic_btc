@@ -19,7 +19,8 @@ spec:
     spec:
       containers:
         - name: petclinic-was
-          image: 534334097321.dkr.ecr.ap-northeast-2.amazonaws.com/pet/waserver:v2
+          image: 534334097321.dkr.ecr.ap-northeast-2.amazonaws.com/pet/waserver:v2\
+          imagePullPolicy: Always  
           ports:
             - containerPort: 8080
           env:
