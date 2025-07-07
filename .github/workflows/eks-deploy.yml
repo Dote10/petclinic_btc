@@ -1,0 +1,53 @@
+name: Build and Deploy to ECR
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: ap-northeast-2
+      ECR_REPO: 534334097321.dkr.ecr.ap-northeast-2.amazonaws.com/pet/waserver
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::534334097321:role/github-actions-role
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+
+      - name: Set image tag
+        id: vars
+        run: echo "TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        run: |
+          docker build -t $ECR_REPO:$TAG .
+
+      - name: Push to ECR
+        run: |
+          docker push $ECR_REPO:$TAG
+
+      - name: Update image tag in pet-was-deploy.yaml
+        run: |
+          sed -i "s|image: .*$|image: $ECR_REPO:$TAG|" k8s/pet-was-deploy.yaml
+
+      - name: Commit and push updated manifest
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add k8s/pet-was-deploy.yaml
+          git commit -m "Update image tag to $TAG"
+          git push
