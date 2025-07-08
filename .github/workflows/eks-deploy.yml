@@ -45,14 +45,13 @@ jobs:
         run: |
           docker push $ECR_REPO:$TAG
 
-      # - name: Update image tag in pet-was-deploy.yaml
-      #   run: |
-      #     sed -i "s|image: .*$|image: $ECR_REPO:$TAG|" k8s/pet-was-deploy.yaml
+      - name: Update Kubernetes manifest with new image tag
+        run: |
+          sed -i "s|\(image: .*/waserver:\).*|\1${TAG}|" k8s/pet-was-deploy.yaml
 
-      # - name: Commit and push updated manifest
-      #   run: |
-      #     git config --global user.email "action@github.com"
-      #     git config --global user.name "GitHub Action"
-      #     git add k8s/pet-was-deploy.yaml
-      #     git commit -m "Update image tag to $TAG"
-      #     git push
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git commit -am "Update image tag to $TAG"
+          git push origin main
