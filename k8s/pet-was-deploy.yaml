@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: petwas
-          image: 534334097321.dkr.ecr.ap-northeast-2.amazonaws.com/pet/waserver:20250708043855
+          image: 534334097321.dkr.ecr.ap-northeast-2.amazonaws.com/pet/waserver:20250708044720
           imagePullPolicy: Always  
           ports:
             - containerPort: 8080
