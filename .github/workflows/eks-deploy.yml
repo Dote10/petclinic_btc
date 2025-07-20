@@ -47,7 +47,7 @@ jobs:
 
       - name: Update Kubernetes manifest with new image tag
         run: |
-          sed -i "s|\(image: .*/waserver:\).*|\1${TAG}|" k8s/pet-was-deploy.yaml
+          sed -i "s|\(image: .*/waserver:\).*|\1${TAG}|" k8s/base/pet-was-deploy.yaml
 
       - name: Commit and push new image tag
         env:
