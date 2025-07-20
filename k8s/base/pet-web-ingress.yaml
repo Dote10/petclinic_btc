@@ -26,8 +26,9 @@ spec:
                 name: pet-web-service
                 port:
                   number: 80
-    - http:
-        paths:  # ← 들여쓰기 수정됨
+    - host: null  # ← 명시적으로 null 처리
+      http:
+        paths:
           - path: /
             pathType: Prefix
             backend:
