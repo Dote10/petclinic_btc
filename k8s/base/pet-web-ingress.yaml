@@ -26,13 +26,3 @@ spec:
                 name: pet-web-service
                 port:
                   number: 80
-    - host: null  # ← 명시적으로 null 처리
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: pet-web-service
-                port:
-                  number: 80
