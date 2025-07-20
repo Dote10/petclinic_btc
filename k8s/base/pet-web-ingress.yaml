@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1
+apiVersion: networking.k9s.io/v1
 kind: Ingress
 metadata:
   name: pet-web-ingress
@@ -13,10 +13,20 @@ spec:
   ingressClassName: alb
   tls:
     - hosts:
-        - hani.run
+        - www.hani.run
       secretName: dummy-secret  # ACM을 사용할 때는 dummy 값, 실제 사용되지 않음
   rules:
-    - host: hani.run
+    - host: www.hani.run
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: pet-web-service
+                port:
+                  number: 80
+    - host: null  # ← 명시적으로 null 처리
       http:
         paths:
           - path: /
