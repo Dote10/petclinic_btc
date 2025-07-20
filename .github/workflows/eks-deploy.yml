@@ -49,16 +49,16 @@ jobs:
         run: |
           sed -i "s|\(image: .*/waserver:\).*|\1${TAG}|" k8s/pet-was-deploy.yaml
 
-      - name: Commit and push new image tag
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        run: |
-          git config user.name "Dote10"
-          git config user.email "your-email@example.com"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/Dote10/petclinic_btc.git
-          git add k8s/pet-was-deploy.yaml
-          git commit -m "Update image tag to $TAG" || echo "No changes to commit"
-          git push origin main
+      # - name: Commit and push new image tag
+      #   env:
+      #     GH_PAT: ${{ secrets.GH_PAT }}
+      #   run: |
+      #     git config user.name "Dote10"
+      #     git config user.email "your-email@example.com"
+      #     git remote set-url origin https://x-access-token:${GH_PAT}@github.com/Dote10/petclinic_btc.git
+      #     git add k8s/pet-was-deploy.yaml
+      #     git commit -m "Update image tag to $TAG" || echo "No changes to commit"
+      #     git push origin main
 
       # - name: Set up Git identity
       #   run: |
