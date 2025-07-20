@@ -45,20 +45,28 @@ jobs:
         run: |
           docker push $ECR_REPO:$TAG
 
-      - name: Update Kubernetes manifest with new image tag
+      - name: Update Kubernetes manifest with new image tag (if exists)
         run: |
-          sed -i "s|\(image: .*/waserver:\).*|\1${TAG}|" k8s/base/pet-was-deploy.yaml
+          if [ -f k8s/base/pet-was-deploy.yaml ]; then
+            sed -i "s|\(image: .*/waserver:\).*|\1${TAG}|" k8s/base/pet-was-deploy.yaml
+          else
+            echo "k8s/base/pet-was-deploy.yaml does not exist. Skipping image tag update."
+          fi
 
-      - name: Commit and push new image tag
+      - name: Commit and push new image tag (if file exists)
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git config user.name "Dote10"
-          git config user.email "your-email@example.com"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/Dote10/petclinic_btc.git
-          git add k8s/base/pet-was-deploy.yaml
-          git commit -m "Update image tag to $TAG" || echo "No changes to commit"
-          git push origin main
+          if [ -f k8s/base/pet-was-deploy.yaml ]; then
+            git config user.name "Dote10"
+            git config user.email "your-email@example.com"
+            git remote set-url origin https://x-access-token:${GH_PAT}@github.com/Dote10/petclinic_btc.git
+            git add k8s/base/pet-was-deploy.yaml
+            git commit -m "Update image tag to $TAG" || echo "No changes to commit"
+            git push origin main
+          else
+            echo "k8s/base/pet-was-deploy.yaml does not exist. Skipping commit and push."
+          fi
 
       # - name: Set up Git identity
       #   run: |
