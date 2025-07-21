@@ -4,7 +4,7 @@ metadata:
   name: petweb
   namespace: pet
 spec:
-  replicas: 5
+  replicas: 3
   selector:
     matchLabels:
       app: web
@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: petclinic-web
-          image: 534334097321.dkr.ecr.ap-northeast-2.amazonaws.com/pet/webserver:v12          
+          image: 534334097321.dkr.ecr.ap-northeast-2.amazonaws.com/pet/webserver:v13          
           ports:
             - containerPort: 80
