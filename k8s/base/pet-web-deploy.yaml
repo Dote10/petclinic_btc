@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: petclinic-web
-          image: 534334097321.dkr.ecr.ap-northeast-2.amazonaws.com/pet/webserver:v10
+          image: 534334097321.dkr.ecr.ap-northeast-2.amazonaws.com/pet/webserver:v12
           ports:
             - containerPort: 80
