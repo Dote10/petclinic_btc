@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: petweb
+  namespace: pet
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+      name: apache
+  template:
+    metadata:
+      labels:
+        app: web
+        name: apache
+    spec:
+      containers:
+        - name: petclinic-web
+          image: 534334097321.dkr.ecr.ap-northeast-2.amazonaws.com/pet/webserver:v10
+          ports:
+            - containerPort: 80
