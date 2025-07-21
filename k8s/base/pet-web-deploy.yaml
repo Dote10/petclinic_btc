@@ -4,7 +4,7 @@ metadata:
   name: petweb
   namespace: pet
 spec:
-  replicas: 2
+  replicas: 5
   selector:
     matchLabels:
       app: web
