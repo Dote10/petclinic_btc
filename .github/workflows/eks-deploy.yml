@@ -39,14 +39,15 @@ jobs:
           CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
           echo "$CHANGED_FILES"
 
-          # Change this pattern as needed
-          APP_CHANGED=$(echo "$CHANGED_FILES" | grep -E '^(src/|Dockerfile|pom.xml|\.mvn|\.java|\.xml)' || true)
+          NON_K8S_CHANGED=$(echo "$CHANGED_FILES" | grep -v '^k8s/' || true)
 
-          if [ -n "$APP_CHANGED" ]; then
+          if [ -n "$NON_K8S_CHANGED" ]; then
             echo "code_changed=true" >> $GITHUB_OUTPUT
           else
             echo "code_changed=false" >> $GITHUB_OUTPUT
           fi
+      
+      
 
       - name: Set image tag
         if: steps.check_changes.outputs.code_changed == 'true'
