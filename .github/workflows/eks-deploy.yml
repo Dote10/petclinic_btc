@@ -31,17 +31,35 @@ jobs:
 
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Check for application source code changes
+        id: check_changes
+        run: |
+          git fetch origin main
+          CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
+          echo "$CHANGED_FILES"
 
+          # Change this pattern as needed
+          APP_CHANGED=$(echo "$CHANGED_FILES" | grep -E '^(src/|Dockerfile|pom.xml|\.mvn|\.java|\.xml)' || true)
+
+          if [ -n "$APP_CHANGED" ]; then
+            echo "code_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "code_changed=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set image tag
+        if: steps.check_changes.outputs.code_changed == 'true'
         id: vars
         run: echo "TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
-
+      
       - name: Build Docker image
+        if: steps.check_changes.outputs.code_changed == 'true'
         run: |
           docker build -t $ECR_REPO:$TAG .
-
+      
       - name: Push to ECR
+        if: steps.check_changes.outputs.code_changed == 'true'
         run: |
           docker push $ECR_REPO:$TAG
 
@@ -88,3 +106,27 @@ jobs:
       #     git config user.email "github-actions@users.noreply.github.com"
       #     git commit -am "Update image tag to $TAG"
       #     git push origin main
+
+      # - name: Update Kubernetes manifest with new image tag
+      #   run: |
+      #     sed -i "s|\(image: .*/waserver:\).*|\1${TAG}|" k8s/pet-was-deploy.yaml
+
+      # - name: Commit and push changes
+      #   run: |
+      #     git config user.name "github-actions"
+      #     git config user.email "github-actions@users.noreply.github.com"
+      #     git commit -am "Update image tag to $TAG"
+      #     git push origin main
+
+      #수정된 소스코드가 있을때만 빌드 
+      # - name: Set image tag
+      #   id: vars
+      #   run: echo "TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
+      # - name: Build Docker image
+      #   run: |
+      #     docker build -t $ECR_REPO:$TAG .
+
+      # - name: Push to ECR
+      #   run: |
+      #     docker push $ECR_REPO:$TAG
