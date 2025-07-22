@@ -25,6 +25,9 @@ jobs:
         with:
           fetch-depth: 0
       
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+      
       - name: Check for application source code changes
         id: check_changes
         run: |
@@ -46,25 +49,6 @@ jobs:
           role-to-assume: arn:aws:iam::534334097321:role/github-actions-role
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to ECR
-        uses: aws-actions/amazon-ecr-login@v1
-      
-      - name: Check for application source code changes
-        id: check_changes
-        run: |
-          git fetch origin main
-          CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
-          echo "$CHANGED_FILES"
-
-          NON_K8S_CHANGED=$(echo "$CHANGED_FILES" | grep -v '^k8s/' || true)
-
-          if [ -n "$NON_K8S_CHANGED" ]; then
-            echo "code_changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "code_changed=false" >> $GITHUB_OUTPUT
-          fi
-      
-      
 
       - name: Set image tag
         if: steps.check_changes.outputs.code_changed == 'true'
