@@ -25,6 +25,12 @@ jobs:
         with:
           fetch-depth: 0
       
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::534334097321:role/github-actions-role
+          aws-region: ${{ env.AWS_REGION }}
+      
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v1
       
