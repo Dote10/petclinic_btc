@@ -11,7 +11,7 @@ metadata:
     change.reason: "frist create"
     change.date: "2025-07-20"
 spec:
-  replicas: 2
+  replicas: 5
   selector:
     matchLabels:
       app: was
